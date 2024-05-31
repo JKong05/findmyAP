@@ -21,12 +21,31 @@ def get_input():
             exit()
 
 def ap_list(n, data):
-    for exam in range(n):
-        course = input("Enter course: ")
-        score = input("Enter score received: ")
-        data[course] = score
+    course_list = ["AP Calculus AB", "AP Calculus BC", "AP Chemistry", "AP Latin", "AP Biology", "AP Research", "AP Seminar", "AP Psychology", "AP United States History", "AP Macroeconomics", "AP Microeconomics", "AP Human Geography"]
+    for _ in range(n):
+        while True:
+            try: 
+                course = input("Enter course: ")
+                if course in course_list:
+                    break
+                else:
+                    print("Course not found in the list. Please enter a valid course.")
+            except Exception as e:
+                print(f"An error occurred: {e}. Please try again.")
+        while True:
+            try:
+                score = int(input("Enter score: "))
+                if 0 < score < 6:
+                    data[course] = score
+                    break
+                else:
+                    print("Invalid score. Please enter a valid score.")
+            except Exception as e:
+                print(f"An error occurred: {e}. Please try again.")
 
     return data
+
+
 
 if __name__ == "__main__":
     main()
