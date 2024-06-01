@@ -1,50 +1,52 @@
-def main():
-    data = {}
-    n = get_input()
-    data = ap_list(n, data)
+from schools import search_lists
 
-def get_input():
+class User():
+    def __init__(self, school, ap_scores):
+        self.school = school
+
+def main():
+    user = user_input()
+    user = user_scores()
+
+
+def user_input():
     while True:
         try:
-            n = int(input("How many AP exams have you taken? "))
-            if n == 0 or n > 38:
-                print("Null")
-                exit()
-            if n < 0:
-                print("Please enter a positive integer.")
+            school = input("What school do you want to look at? ")
+            school = search_lists(school=school)
+
+            if school == None:
+                print("Not a valid school.")
                 continue
-            return n
+            else:
+                print("Looking at " + school)
+                break
         except ValueError:
-            print("Please enter a valid integer.")
+            print("Null. Please try again")
             continue
         except EOFError:
             exit()
+    user = User(school)
+    return user
 
-def ap_list(n, data):
-    course_list = ["AP Calculus AB", "AP Calculus BC", "AP Chemistry", "AP Latin", "AP Biology", "AP Research", "AP Seminar", "AP Psychology", "AP United States History", "AP Macroeconomics", "AP Microeconomics", "AP Human Geography"]
-    for _ in range(n):
-        while True:
-            try: 
+def user_scores():
+    data = {}
+    num_exams = get_num_exams()
+    while True:
+        try:
+            for exam in range(num_exams):
                 course = input("Enter course: ")
-                if course in course_list:
-                    break
-                else:
-                    print("Course not found in the list. Please enter a valid course.")
-            except Exception as e:
-                print(f"An error occurred: {e}. Please try again.")
-        while True:
-            try:
-                score = int(input("Enter score: "))
-                if 0 < score < 6:
-                    data[course] = score
-                    break
-                else:
-                    print("Invalid score. Please enter a valid score.")
-            except Exception as e:
-                print(f"An error occurred: {e}. Please try again.")
-
-    return data
-
+                course = search_courses(course=course)
+        except:
+            ...
+def get_num_exams():
+    while True:
+        num = int(input("How many AP exams have you taken? "))
+        if 0 < num < 39:
+            return num
+        else:
+            print("Invalid input. Please enter a valid integer.")
+            continue
 
 
 if __name__ == "__main__":
