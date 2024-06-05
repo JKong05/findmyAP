@@ -1,0 +1,39 @@
+.results {
+    font-family: 'Times New Roman', Times, serif;
+}
+
+.search-container {
+    margin: auto;
+    width: 50%;
+    background-color: #ADD8E6;
+    padding: 10px;
+    border-radius: 25px;
+}
+
+#search-function {
+    margin: auto;
+}
+
+#ui-id-1 {
+    list-style-type: none;
+    padding: 0; /* Optional: Remove padding to align the list items with the container */
+    margin: 0;
+    width: 200px; /* Set the width of the scrollable box */
+    height: 150px; /* Set the height of the scrollable box */
+    overflow: auto; /* Add scrollbars when content overflows */
+    border: 1px solid #ccc;
+    background: white;
+}
+
+.ui-helper-hidden-accessible {
+    display: none;
+}
+
+.ui-autocomplete .ui-menu-item-wrapper {
+    padding: 5px 10px;
+}
+
+.ui-autocomplete .ui-menu-item-wrapper:hover {
+    background-color: #3B71CA;/* Change the background color on hover */
+    cursor: pointer; /* Change the cursor to indicate interactivity */
+}
