@@ -2,12 +2,90 @@
     font-family: 'Times New Roman', Times, serif;
 }
 
-.search-container {
+body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: normal;
+}
+
+header {
+    background-color: #ffffff; 
+    padding: 10px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    z-index: 1;
+}
+
+.wrapped-content {
+    z-index: 0;
+}
+
+#home-wrapped-content {
+    background-image: linear-gradient(rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.15)), url('/static/background.jpg');
+    background-position: -230px -80px;
+}
+
+#navigation {
+    z-index: 1;
+}
+
+.logo {
+    text-decoration: none;
+    color: black
+}
+
+.custom-modal {
+    color: black
+}
+
+.signup-container-button {
+    align-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+.title-container {
+    width: 100%;
+    height: 50vh;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
+
+.title-container h1 {
+    font-size: 100px;
+    font-weight: 600px;
+    text-align: center;
+    line-height: 1.1;
+    background-color: white; /* White background with some transparency */
+    padding: 10px 20px; /* Add padding to ensure the background highlights the text properly */
+    border-radius: 10px; /* Optional: add some rounding to the corners */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+}
+
+.search-container h3 {
+    text-align: center;
+    vertical-align: middle;
+    line-height: 5vh;
+}
+
+.form-control {
+    border-bottom-left-radius: 30%;
+    border-top-left-radius: 30%;
+}
+
+#home-search-container {
+    height: 35vh;
     margin: auto;
     width: 50%;
-    background-color: #ADD8E6;
-    padding: 10px;
-    border-radius: 25px;
+    padding: 25px;
+}
+
+#school-search-container {
+    height: 10vh;
+    margin: auto;
+    width: 50%;
+    padding: 25px;
 }
 
 #search-function {
@@ -16,11 +94,11 @@
 
 #ui-id-1 {
     list-style-type: none;
-    padding: 0; /* Optional: Remove padding to align the list items with the container */
+    padding: 0; 
     margin: 0;
-    width: 200px; /* Set the width of the scrollable box */
-    height: 150px; /* Set the height of the scrollable box */
-    overflow: auto; /* Add scrollbars when content overflows */
+    width: 200px;
+    height: 150px;
+    overflow: auto; 
     border: 1px solid #ccc;
     background: white;
 }
@@ -37,3 +115,24 @@
     background-color: #3B71CA;/* Change the background color on hover */
     cursor: pointer; /* Change the cursor to indicate interactivity */
 }
+
+.autocomplete-load-more {
+    border: none;
+    padding: 5px 10px;
+    text-decoration: underline;
+    cursor: pointer; /* Cursor pointer */
+    background-color: white;
+    margin: 0;
+    position: absolute;
+    right: 0;
+}
+
+.autocomplete-load-more:hover {
+    text-decoration: underline;
+    text-decoration-color: #3B71CA;
+    color:#3B71CA;
+}
+
+input[type='search']::-webkit-search-cancel-button {
+    filter: grayscale(1);
+  }
