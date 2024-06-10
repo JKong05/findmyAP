@@ -15,15 +15,20 @@ def scraping_content(school_ids):
     connection = sqlite3.connect("school_data.db")
     cursor = connection.cursor()
 
-    cursor.execute("DROP TABLE IF EXISTS school")
+    cursor.execute("DROP TABLE IF EXISTS updateschool")
     cursor.execute("""
-                   CREATE TABLE school (
-                   school_name TEXT, 
-                   course_name TEXT, 
-                   min_ap_score INTEGER,
-                   equivalent_credit TEXT
+                CREATE TABLE updateschool (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                school_name TEXT, 
+                course_name TEXT, 
+                min_ap_score INTEGER,
+                equivalent_credit TEXT,
+                location TEXT,
+                url TEXT
+
                    )
                    """)
+    
     
     for school_id in school_ids:
         try:
@@ -31,7 +36,7 @@ def scraping_content(school_ids):
             driver.get(url)
             
             # This will check to ensure again that the table provided by collegeboard exists
-            wait = WebDriverWait(driver, 6)
+            wait = WebDriverWait(driver, 10)
             wait.until(EC.presence_of_element_located((By.ID, "APCPTable")))
             wait.until(EC.presence_of_element_located((By.CLASS_NAME, 'cb-h4')))
             
@@ -42,7 +47,11 @@ def scraping_content(school_ids):
             courses = driver.find_elements(By.XPATH, '//table[@id="APCPTable"]/tbody/tr/th/a')
             scores = driver.find_elements(By.XPATH, '//table[@id="APCPTable"]/tbody/tr/td[1]')
             equal_credits = driver.find_elements(By.XPATH, '//table[@id="APCPTable"]/tbody/tr/td[3]')
+            location_element = driver.find_element(By.XPATH, '//*[@id="APCPSearchRoot"]/div/div/div[1]/div/p[1]')
+            location = location_element.text
 
+            url = driver.find_element(By.XPATH, '//*[@id="APCPSearchRoot"]/div/div/div[1]/div/h2/a').get_attribute('href')
+           
             for course, score, equal_credit in zip(courses, scores, equal_credits):
                 course_name = course.text
                 ap_score_text = score.text
@@ -54,14 +63,19 @@ def scraping_content(school_ids):
 
                 equivalent_credit = equal_credit.text
 
-                cursor.execute("INSERT INTO school (school_name, course_name, min_ap_score, equivalent_credit) VALUES (?, ?, ?, ?)",
-                               (school_name, course_name, min_ap_score, equivalent_credit))
+                cursor.execute("INSERT INTO updateschool (school_name, course_name, min_ap_score, equivalent_credit, location, url) VALUES (?, ?, ?, ?, ?, ?)",
+                               (school_name, course_name, min_ap_score, equivalent_credit, location, url))
             connection.commit()
         except (NoSuchElementException, TimeoutException):
+            print(NoSuchElementException)
+            print(TimeoutException)
+            print(school_name)
+            print(school_id)
             continue
         except ValueError:
             print(f"Error reported at: {school_id}")
             exit()
+            
     connection.close()
 
 def helper_function():
@@ -88,11 +102,11 @@ def helper_function():
 def main():
     # can uncomment this if need to call to this function again
     # collected_ids = helper_function() 
-    df = pd.read_csv('scraping/ID.csv')
+    df = pd.read_csv('ID.csv')
     school_ids = df['school_id']
     
     # can uncomment this if need to rerurn scrape
-    # scraping_content(school_ids)
+    scraping_content(school_ids)
 
     driver.quit()
 

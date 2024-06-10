@@ -1,0 +1,208 @@
+{% extends "index.html" %}
+
+{% block title %} 
+    <title>{{ school_name }}</title> 
+{% endblock %}
+
+{% block header %}
+{% endblock %}
+
+{% block main %}
+{% endblock %}
+
+{% block search %}
+<div class="search-wrapper">
+    <div class="search-container" id="school-search-container">
+        <form class="form-outline" id="search-function" action="{{ url_for('school_details.school_details') }}" method="get" data-mdb-input-init>
+            <div class="input-group">
+                <input type="search" id="school_name" name="school_name" placeholder="Find your school" class="form-control" aria-label="Search" required>
+                <button class="btn btn-primary" id="search-button" type="submit">
+                    <i class="si-search"></i>
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="result-header container-md ml-4">
+    <div class="row justify-content-between">
+        <div class="col-auto d-flex align-items-end">
+            <h1>{{ school_name }}</h1>
+        </div>
+        <div class="col d-flex align-items-end">
+            <h5 style="color: grey">{{ location }}</h5>
+        </div>
+    </div>
+    <div class="row">
+        <div clas="col-auto d-flex align-items-center">
+            <p>Want to know more about this school? <a href="{{ url }}" target="_blank">Click here.</a></p>
+        </div>
+    </div>
+</div>
+<div class="temp-user-container container-xxl border border-dark-subtle mb-4">
+    <div class="step-one-container my-2 flex-grow-1">
+        <div class="row mx-2">
+            <div class="col d-flex">
+                <div class="h2 pt-2 border-bottom border-primary">
+                    <h2 style="color: #3B71CA">Step 1</h2>
+                </div>
+            </div>
+        </div>
+        <div class="row mx-2">
+            <div class="col d-flex align-items-center">
+                <p>Fill out the input fields with the course you took and the AP score you received on the exam. Make sure that these values <b>correctly match</b> and that they reflect the values that you want to input. You can press the <i class="si-close"></i> button to individually delete entries and press the <i class="si-trash"></i> button to delete all entries. Once you are finished filling out both, press the submit button to get your results!</p>
+            </div>
+        </div>
+        <div class="row mx-2">
+            <div class="col-10 d-flex align-items-center">
+                <form class="form-outline mb-3" id="temp-user-function" action="{{ url_for('school_details.school_details') }}" method="post" data-mdb-input-init>
+                    <div class="input-group">
+                        <input type="search" list="courses" id="course_name" name="course_name" placeholder="Find your course" class="form-control" aria-label="CourseName">
+                        <div class="select-container">
+                            <select id="ap_score" name="ap_score" class="form-select select-container">
+                                <option value="1">1</option>
+                                <option value="2">2</option>
+                                <option value="3">3</option>
+                                <option value="4">4</option>
+                                <option value="5">5</option>
+                            </select>
+                        </div>
+                        <button id="addCourseButton" type="button" class="btn btn-outline-primary"><i class="si-plus"></i></button>
+                    </div>
+                    <div class="container">
+                        <ul id="courseList" class="mt-2"></ul>
+                    </div>
+                    <div class="temp-user-footer d-flex">
+                        <button type="submit" class="btn btn-outline-primary" id="course-submit">Get Results!</button>
+                        <div id="deleteAllContainer"></div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <img src="static/exam.svg" style="transform: scale(0.5)">
+</div>
+<div id="resultsContainer" class="container-xxl border border-dark-subtle" {% if show_details %} style="display: block;" {% else %} style="display: none" {% endif %}>
+    {% if result_details %}
+    <div class="row mx-2 mt-2">
+        <div class="col d-flex">
+            <div class="h2 pt-2 border-bottom border-primary">
+                <h2 style="color: #3B71CA">Step 2</h2>
+            </div>
+        </div>
+    </div>
+    <div class="row mx-2 mt-2">
+        <div class="col-4">
+            <div class="card result-card">
+                <div class="card-body">
+                    <div class="card-title">
+                        <h3>You have <span style="color: #3B71CA"><b>{{ unique_course_name|length }}</b></span> {% if unique_course_name|length == 1 %} course <br>eligible for credit {% else %} courses <br> eligible for credit {% endif %}</h3>
+                    </div>
+                    <ul class="course-list-container">
+                        {% for course_name in unique_course_name %}
+                        <li class="course-list-item">{{ course_name }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="card result-card">
+                <div class="card-body">
+                    <div class="card-title">
+                        {% if credits == 0 %}
+                        <h3 class="mt-2">This school may not offer credits for your courses</h3>
+                        {% else %}
+                        <h3>You could earn </h3>
+                        {% endif %}
+                    </div>
+                    <div class="card-subtitle mb-1">
+                        {% if credits == 0 %}
+                        {% else %}
+                        <h3><span style="color: #3B71CA"><b>{{ credits }}</b></span> credits</h3>
+                        {% endif %}
+                    </div>
+                    <p class="card-text">This result may not be entirely accurate. Please be sure to consult with the school's AP credit policies regarding overlapping credits and school-specific policies about using AP credit.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="card result-card">
+                <div class="card-body">
+                    <div class="card-title">
+                        <h3>You fullfill <span style="color: #3B71CA"><b>these credits</b></span> at this school</h3>
+                    </div>
+                    <ul class="course-list-container">
+                        {% for result in result_details %}
+                        <li class="course-list-item">{{ result.course_name}}: {{result.equal_credit }}</li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mx-2 my-4">
+        <div class="col-12">
+            <div class="card result-card">
+                <div class="card-body">
+                    <div class="card-title">
+                        <h3>All data</h3>
+                        <ul class="course-list-container">
+                            {% for result in result_details %}
+                            <li class="course-list-item"><b style="color:#3B71CA">{{ result.course_name}}</b> | <b>AP Score Required:</b> {{result.min_ap_score}} | <b>Credits received: </b> {{result.credit }} | <b>Equal credit: </b> {{result.equal_credit}}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>    
+    {% else %}
+    <div class="row mx-2 mt-2">
+        <div class="col d-flex">
+            <div class="h2 pt-2 border-bottom border-primary">
+                <h2 style="color: #3B71CA">Step 2</h2>
+            </div>
+        </div>
+    </div> 
+    <div class="row mx-2">
+        <div class="col d-flex align-items-center">
+            <p>You might not earn any credit at this school. Please be sure to refer to the school's credit policy if you believe this is a mistake. </p>
+        </div>  
+    </div>
+    {% endif %}
+</div>
+{% if show_details %}
+<div class="temp-user-container-results container-xxl border border-dark-subtle my-4 d-flex align-items-start">
+    <div class="step-three-container my-2 flex-grow-1">
+        <div class="row mx-2">
+            <div class="col d-flex">
+                <div class="h2 pt-2 border-bottom border-primary">
+                    <h2 style="color: #3B71CA">Step 3</h2>
+                </div>
+            </div>
+        </div>
+        <div class="row mx-2">
+            <div class="col d-flex align-items-center">
+                <p>It is important for students to keep a record or datasheet of possible credits earned throughout high school. Below is a .csv file containing all relevant data for which AP courses that may fulfill college credit. To use the search function again, <a href="#">click here.</a></p>
+            </div>
+        </div>
+        <div class="row mx-2">
+            <div class="col d-flex align-items-center">
+                <p><a href="data:text/csv;charset=utf-8,{{ csv_content | urlencode }}" download="{{ school_name }}.csv" class="csv-download"><i class="si-download"></i> Download CSV</a></p>
+            </div>
+        </div>
+    </div>
+    <div class="img-container">
+       <img src="static/graduation.svg" class="graduation-image">
+    </div>
+</div>
+{% endif %}
+</div>
+{% endblock %}
+
+{% block lowercontent %}
+{% endblock %}

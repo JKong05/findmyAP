@@ -3,11 +3,6 @@ from wtforms import StringField, SubmitField, PasswordField, SelectField, TextAr
 from wtforms.validators import DataRequired, InputRequired, Length, ValidationError
 from app.models import User
 
-class submitTempData(FlaskForm):
-    course_name = TextAreaField('Course Name', validators=[DataRequired()])
-    ap_score = SelectField('Score', choices=[(str(i), str(i)) for i in range(1, 6)], validators=[InputRequired()])
-    submit = SubmitField('Submit')
-
 class SignUpForm(FlaskForm):
     username = StringField('Username', validators=[InputRequired(), Length(
         min=4, max=20)], render_kw={"placeholder": "Username"})

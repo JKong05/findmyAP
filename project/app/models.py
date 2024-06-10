@@ -3,12 +3,19 @@ from flask_login import UserMixin
 
 
 class School(db.Model):
-    __tablename__ = 'school'
+    __tablename__ = 'updateschool'
     id = db.Column(db.Integer, primary_key = True)
     school_name = db.Column(db.Text)
     course_name = db.Column(db.Text)
     min_ap_score = db.Column(db.Integer, nullable=True)
     equivalent_credit = db.Column(db.Text)
+    location = db.Column(db.Text)
+    url = db.Column(db.Text)
+
+class Course(db.Model):
+    __tablename__ = 'courses'
+    id = db.Column(db.Integer, primary_key = True)
+    course_name = db.Column(db.Text)
 
 # This is the table that will house a user who decides to login to access the all-in-one function.
 # I did this because my assumption is that some students will go to one school and fill out their information

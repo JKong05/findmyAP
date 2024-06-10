@@ -1,6 +1,6 @@
 $(document).ready(function() {
     // This section of code is accounting when you click on the input field --> shows entire list of autocomplete
-    var autocompleteSelected = false;
+    let autocompleteSelected = false;
     
     $('#searchBtn').prop('disabled',true);
 
@@ -19,7 +19,7 @@ $(document).ready(function() {
      * the input field.
     */ 
     $('#school_name').on('input', function() {
-        var inputValue = $(this).val().trim();
+        let inputValue = $(this).val().trim();
         
         // This is checking to ensure that the input that the user puts in is not A) empty and B) spaces.
         if (!autocompleteSelected && inputValue === '') {
@@ -50,7 +50,7 @@ $(document).ready(function() {
     */
       
     $('#search-function').submit(function(event) {
-        var inputValue = $('#school_name').val().trim();
+        let inputValue = $('#school_name').val().trim();
         if (inputValue === '' || inputValue === null) {
             event.preventDefault(); // Prevent form submission
         }
@@ -87,11 +87,11 @@ $(document).ready(function() {
      * 
      */
 
-    var currentList = 0;
-    var itemsPerList = 200;
-    var allData = [];
-    var displayedData = [];
-    var loadMoreButton = $('<button>').text('Load More Schools').addClass('autocomplete-load-more');
+    let currentList = 0;
+    let itemsPerList = 200;
+    let allData = [];
+    let displayedData = [];
+    let loadMoreButton = $('<button>').text('Load More Schools').addClass('autocomplete-load-more');
 
     $('#school_name').autocomplete({
         source: function(request, response) {
@@ -156,4 +156,197 @@ $(document).ready(function() {
         });
     });
 });
+
+/********************************************************* */
+$(document).ready(function() {
+    let allData = [];
+    let autocompleteSelected = false;
+    
+    $('#addCourseButton').prop('disabled', true);
+    setTimeout(function() {
+        $("#course-submit").prop("disabled", true);
+    }, 0);
+
+    $('#course_name').autocomplete ({
+        source: function(request, response) {
+            $.getJSON('/autocomplete_courses', { query: request.term }, function(data) {
+                allData = data.sort();
+                response(allData);
+            });
+        },
+        minLength: 0,
+        select: function(event, ui) {
+            $('#course_name').val(ui.item.value);
+            autocompleteSelected = true;
+            validateInput(allData);
+            $(this).autocomplete("close");
+        },
+        open: function(event, ui) {
+            $(this).autocomplete("widget").off("keydown").on("keydown", function(event) {
+                if (event.keyCode === $.ui.keyCode.ENTER) {
+                    event.preventDefault();
+                }
+            });
+        }
+    });
+
+    $('#course_name').on('keydown', function(event) {
+        if (event.keyCode === 13) {
+            event.preventDefault();
+        }
+    });
+
+    $('#course_name').on('input', function(event) {
+        $('#course_name').autocomplete("close");
+        autocompleteSelected = true;
+        validateInput(allData);
+    });
+
+    function validateInput(allData) {
+        let inputValue = $('#course_name').val().trim();
+        let validValue = allData.includes(inputValue);
+    
+        if (inputValue === '' || validValue === false) {
+            $('#addCourseButton').prop('disabled', true);
+        } else if ($('.list-item-container li:contains("' + inputValue + '")').length > 0) {
+            $('#addCourseButton').prop('disabled', true);
+        } else {
+            $('#addCourseButton').prop('disabled', false);
+        }
+    };
+
+    document.getElementById("addCourseButton").addEventListener("click", addCourse)
+    $('#course-submit').prop('disabled', false);
+
+    document.getElementById("temp-user-function").addEventListener('submit', function() {
+        let storedData = document.createElement('input');
+        storedData.type = 'hidden';
+        storedData.name = 'courseData';  
+        storedData.value = JSON.stringify(courseData);
+        this.appendChild(storedData);
+
+        courseData = [];
+        this.submit();
+    });
+
+});
+
+
+var deleteAllAppended = false;
+let courseData = [];
+
+function addCourse() {
+    let courseName = document.getElementById("course_name").value;
+    let apScore = document.getElementById("ap_score").value;
+
+    if (courseName === "" || apScore === "") {
+        return;
+    }
+
+    courseData.push({ courseName: courseName, apScore: apScore});
+    console.log(courseData);
+
+    let deleteButton = createDeleteButton();
+    let listItem = document.createElement("li");
+    listItem.classList.add("course-list-item")
+    listItem.textContent = courseName + ": " + apScore;
+    
+    let listItemContainer = createItemContainer(listItem, deleteButton);
+    
+    deleteButton.addEventListener("click", function() {
+        removeFromCourseData(courseName, apScore);
+        listItemContainer.remove();
+        toggleDeleteAllButton();
+        $('#course_name').val('');
+        let list = document.getElementById("courseList");
+        if (list.children.length > 0) {
+            $('#course-submit').prop('disabled', false);
+        } else {
+            $('#course-submit').prop('disabled', true);
+        }
+    });
+
+    if (!deleteAllAppended) {
+        appendDeleteAllButton();
+        deleteAllAppended = true;
+    }
+
+    document.getElementById("courseList").appendChild(listItemContainer);
+
+    // Reset input values
+    document.getElementById("course_name").value = "";
+    document.getElementById("ap_score").value = "1";
+
+    toggleDeleteAllButton();
+    $('#course-submit').prop('disabled', false);
+}
+
+/* HELPER FUNCTIONS TO CREATE DYNAMIC ELEMENTS */
+function removeFromCourseData(courseName, apScore) {
+    console.log("if u are seeing this, that means this function is being accessed")
+    courseData = courseData.filter(course => !(course.courseName === courseName && course.apScore === apScore))
+    console.log(courseData);
+}
+
+function appendDeleteAllButton() {
+    let deleteAll = createDeleteAllButton();
+    deleteAll.addEventListener("click", function() {
+        courseData = [];
+        $('#course_name').val('');
+        let list = document.getElementById("courseList");
+        list.innerHTML = "";
+        toggleDeleteAllButton();
+        $('#course-submit').prop('disabled', true);
+    });
+    document.getElementById("deleteAllContainer").appendChild(deleteAll);
+}
+
+
+function toggleDeleteAllButton() {
+    let list = document.getElementById("courseList");
+    let deleteAllButton = document.getElementById("deleteAllButton");
+    if (list.children.length > 0) {
+        deleteAllButton.style.display = "block"; 
+    } else {
+        deleteAllButton.style.display = "none";
+    }
+}
+
+
+function createItemContainer(listItem, deleteButton) {
+    let listItemContainer = document.createElement("div");
+    listItemContainer.classList.add("list-item-container", "border", "border-secondary");
+
+    listItemContainer.appendChild(listItem);
+    listItemContainer.appendChild(deleteButton);
+
+    return listItemContainer;
+}
+
+function createDeleteButton() {
+    let deleteButton = document.createElement("button");
+    deleteButton.type = "button";
+    deleteButton.classList.add("delete-button");
+    
+    let icon = document.createElement("i");
+    icon.classList.add("si-close");
+
+    deleteButton.appendChild(icon);
+
+    return deleteButton;
+}
+
+function createDeleteAllButton() {
+    let deleteAll = document.createElement("button");
+    deleteAll.type = "button";
+    deleteAll.classList.add("delete-button-all", "btn", "btn-danger");
+    deleteAll.id = "deleteAllButton";
+    
+    let trashIcon = document.createElement("i");
+    trashIcon.classList.add("si-trash");
+
+    deleteAll.appendChild(trashIcon);
+
+    return deleteAll;
+}
 
