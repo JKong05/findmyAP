@@ -11,4 +11,4 @@ db = SQLAlchemy(app)
 migrate = Migrate(app, db)
 app.register_blueprint(school_details_blueprint)
 
-from app import routes
+from project.app import routes
