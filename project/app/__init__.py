@@ -2,7 +2,7 @@ from flask import Flask
 from project.config import Config
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-from app.school_details_blueprint import school_details_blueprint
+from project.app.school_details_blueprint import school_details_blueprint
 
 app = Flask(__name__)
 app.config.from_object(Config)
