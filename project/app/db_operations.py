@@ -1,4 +1,4 @@
-from app.models import School, Course, User, tempUser
+from app.models import School, Course
 from app import db
 import sqlite3
 from contextlib import contextmanager
@@ -103,14 +103,3 @@ def fetch_credits(school_name, course_data):
     
     conn.close()
     return credit_hours
-
-def temp_access(school_name, course_name, ap_score):
-    temp_session = db.session
-    temp_table = tempUser(temp_school_name=school_name, temp_course_name=course_name, temp_ap_score=ap_score)
-    temp_session.add(temp_table)
-    results = table_comparison()
-
-    return results
-
-def table_comparison():
-    ...

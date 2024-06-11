@@ -1,12 +1,14 @@
-from flask import Blueprint, render_template, request, jsonify, session, redirect, url_for
+from flask import Blueprint, render_template, request, session
 import json
 import uuid
 import pandas as pd
+
 
 school_details_blueprint = Blueprint('school_details', __name__)
 
 @school_details_blueprint.route('/school_details', methods=['GET', 'POST'])
 def school_details():
+    # Done to avoid circular import
     from app.db_operations import query_database, create_instance, fetch_course_names, fetch_credits
 
     if request.method == 'GET':
@@ -23,6 +25,8 @@ def school_details():
         course_data_json = request.form.get('courseData')
         course_data = json.loads(course_data_json)
 
+        session['course_data'] = course_data
+
         if 'instance_user' not in session:
             session['instance-user'] = 'temp_user_data_' + str(uuid.uuid4()).replace('-', '_')
 
@@ -36,9 +40,12 @@ def school_details():
         
         schools = query_database(school_name)
         name, url, location = schools[0].school_name, schools[0].url, schools[0].location
+
+        course_data = session.get('course_data', [])
         
         return render_template('details.html', school_name=name, url=url, location=location, result_details=result_details
-                               , show_details=True, unique_course_name=course_names, credits=credit_hours, csv_content=csv_content) 
+                               , show_details=True, unique_course_name=course_names, credits=credit_hours, csv_content=csv_content,
+                               course_data=course_data) 
 
 def result_append(results, school_name):
     result_details = []

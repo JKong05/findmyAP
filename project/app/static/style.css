@@ -2,16 +2,44 @@
     font-family: 'Times New Roman', Times, serif;
 }
 
-body {
+html, body {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: normal;
+    overflow-x: hidden;
+    height: 100%;
+    min-height: 100%
 }
 
 header {
     background-color: #ffffff; 
     padding: 10px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    z-index: 1;
+    z-index: 100;
+    position: fixed;
+    top: 0;
+    width: 100%;
+}
+
+#site-footer {
+    background-color: #ffffff; 
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    z-index: 100;
+    width: 100%;
+}
+
+#results-footer {
+    background-color: #ffffff; 
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    z-index: 100;
+    width: 100%;
+    position: absolute;
+    margin-top: auto;
+    bottom: 0;
+}
+
+.git-logo {
+    width: auto;
+    height: 28px;
 }
 
 .wrapped-content {
@@ -21,6 +49,8 @@ header {
 #home-wrapped-content {
     background-image: linear-gradient(rgba(0, 0, 0, 0.15), rgba(0, 0, 0, 0.15)), url('/static/background.jpg');
     background-position: -230px -80px;
+    margin-top: 60px;
+    height: 92vh;
 }
 
 #navigation {
@@ -57,9 +87,9 @@ header {
     font-weight: 600px;
     text-align: center;
     line-height: 1.1;
-    background-color: white; /* White background with some transparency */
-    padding: 10px 20px; /* Add padding to ensure the background highlights the text properly */
-    border-radius: 10px; /* Optional: add some rounding to the corners */
+    background-color: white;
+    padding: 10px 20px; 
+    border-radius: 10px; 
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
 }
 
@@ -67,6 +97,14 @@ header {
     text-align: center;
     vertical-align: middle;
     line-height: 5vh;
+}
+
+.centered-container {
+    margin-top: 10vh;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
 }
 
 .form-control {
@@ -92,7 +130,7 @@ header {
     margin: auto;
 }
 
-#ui-id-1 {
+.ui-menu {
     list-style-type: none;
     padding: 0; 
     margin: 0;
@@ -112,15 +150,15 @@ header {
 }
 
 .ui-autocomplete .ui-menu-item-wrapper:hover {
-    background-color: #3B71CA;/* Change the background color on hover */
-    cursor: pointer; /* Change the cursor to indicate interactivity */
+    background-color: #3B71CA;
+    cursor: pointer; 
 }
 
 .autocomplete-load-more {
     border: none;
     padding: 5px 10px;
     text-decoration: underline;
-    cursor: pointer; /* Cursor pointer */
+    cursor: pointer; 
     background-color: white;
     margin: 0;
     position: absolute;
@@ -136,3 +174,185 @@ header {
 input[type='search']::-webkit-search-cancel-button {
     filter: grayscale(1);
   }
+
+.search-wrapper {
+    width: 100%;
+    height: 18vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 60px;
+}
+
+.school-header {
+    background-image: linear-gradient(to top, rgba(0, 0, 0, 1), rgba(0, 0, 0, 0.3) 50%, rgba(0, 0, 0, 0)), url('/static/background2.jpg');
+    background-position: center 55%; 
+    color: white;
+}
+
+.results-container {
+    animation: fade-up 1.5s;
+}
+
+@keyframes fade-up {
+    0% {
+        opacity: 0;
+        transform: translateY(30px) scale(0.9);
+    }
+    100% {
+        opacity: 1;
+        transform: translateY(0px) scale(1);
+    }
+}
+
+.result-header {
+    margin-top: 30px;
+}
+
+.delete-button {
+    border: 0;
+    background: none;
+    margin-left: 5px;
+}
+
+.select-container {
+    border-bottom-left-radius: 0%;
+    border-top-left-radius: 0%;
+}
+
+.form-container {
+    width: 100%; 
+    overflow: hidden;
+}
+
+.form-outline .form-select {
+    width: auto; 
+}
+
+#courseList {
+    list-style-type: none;
+    padding: 0; 
+    margin: 0;
+    width: 441.75px;
+    margin-bottom: 5%;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.list-item-container {
+    list-style-type: none;
+    display: flex;
+    padding: 0; 
+    margin: 0;
+    flex: 0 0 auto;
+    flex-direction: row;
+    box-sizing: border-box;
+    transition: transform .15s;
+}
+
+.list-item-container:hover {
+    transform: scale(1.05);
+}
+
+.course-list-item {
+    margin-left: 8px;
+}
+
+.course-list-container {
+    list-style-type: none;
+    padding: 0; 
+    margin: 0;
+    width: auto;
+    height: 100px;
+    overflow: auto; 
+    border: 1px solid #ccc;
+    background: white;
+}
+
+.result-card {
+    transform: transformation .8s;
+    height: 240px;
+}
+
+.result-card:hover {
+    transform: scale(1.03)
+}
+
+.csv-download {
+    background-color: #3B71CA;
+    border: none;
+    color: white;
+    padding: 12px 30px;
+    cursor: pointer;
+    font-size: 20px;
+    text-decoration: none;
+}
+
+.csv-download:hover {
+    background-color: #162d52;
+}
+
+.step-one-container {
+    width: 60%;
+    display: inline-block;
+}
+
+.temp-user-container {
+    display: flex;
+    align-items: flex-start;
+    height: auto;
+}
+
+.temp-user-container img {
+    margin-left: 20px;
+    transform: scale(0.3);
+}
+
+.temp-user-container-results {
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+    animation: fade-up 3s;
+}
+
+.step-three-container {
+    width: 60%;
+    margin-right: 20px; 
+}
+
+.graduation-image {
+    transform: scale(0.8);
+    margin-left: auto;
+}
+
+
+.card-container {
+    margin-top: 5vh;
+    align-items: center;
+    align-content: center;
+    justify-content: center;
+}
+
+.card-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-bottom-right-radius: 0px;
+}
+
+.card-body {
+    height: 100%;
+}
+
+.card-home {
+    height: 100%;
+}
+
+.img-attribute {
+    text-align: right;
+}
+
+.spacer {
+    height: 50px;
+}

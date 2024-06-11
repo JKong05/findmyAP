@@ -161,13 +161,13 @@ $(document).ready(function() {
 $(document).ready(function() {
     let allData = [];
     let autocompleteSelected = false;
+    let courseData = [];
+    let deleteAllAppended = false; 
     
     $('#addCourseButton').prop('disabled', true);
-    setTimeout(function() {
-        $("#course-submit").prop("disabled", true);
-    }, 0);
+    $("#course-submit").prop("disabled", true);
 
-    $('#course_name').autocomplete ({
+    $('#course_name').autocomplete({
         source: function(request, response) {
             $.getJSON('/autocomplete_courses', { query: request.term }, function(data) {
                 allData = data.sort();
@@ -213,140 +213,156 @@ $(document).ready(function() {
         } else {
             $('#addCourseButton').prop('disabled', false);
         }
-    };
+    }
 
-    document.getElementById("addCourseButton").addEventListener("click", addCourse)
-    $('#course-submit').prop('disabled', false);
+    document.getElementById("addCourseButton").addEventListener("click", addCourse);
+    const courseList = document.getElementById("courseList");
 
+    courseList.addEventListener("DOMNodeInserted", function(event) {
+        if (courseList.children.length > 0) {
+            $('#course-submit').prop('disabled', false);
+        }
+    
+    });
     document.getElementById("temp-user-function").addEventListener('submit', function() {
         let storedData = document.createElement('input');
         storedData.type = 'hidden';
-        storedData.name = 'courseData';  
+        storedData.name = 'courseData';
         storedData.value = JSON.stringify(courseData);
         this.appendChild(storedData);
 
         courseData = [];
-        this.submit();
     });
+
+    function addCourse() {
+        let courseName = document.getElementById("course_name").value;
+        let apScore = document.getElementById("ap_score").value;
+
+        if (courseName === "" || apScore === "") {
+            return;
+        }
+
+        courseData.push({ courseName: courseName, apScore: apScore });
+        sessionStorage.setItem('courseData', JSON.stringify(courseData));
+        console.log(courseData);
+
+        addCourseToList(courseName, apScore);
+    }
+
+    loadCourseDataFromSession();
+
+    function loadCourseDataFromSession() {
+        let storedData = sessionStorage.getItem('courseData');
+        if (storedData) {
+            courseData = JSON.parse(storedData);
+            console.log("Retrieved courseData from session storage:", courseData);
+            courseData.forEach(course => {
+                addCourseToList(course.courseName, course.apScore);
+            });
+        }
+    }
+
+    function addCourseToList(courseName, apScore) {
+        let deleteButton = createDeleteButton();
+        let listItem = document.createElement("li");
+        listItem.classList.add("course-list-item");
+        listItem.textContent = `${courseName}: ${apScore}`;
+        
+        let listItemContainer = createItemContainer(listItem, deleteButton);
+        
+        deleteButton.addEventListener("click", function() {
+            removeFromCourseData(courseName, apScore);
+            listItemContainer.remove();
+            toggleDeleteAllButton();
+            $('#course_name').val('');
+            let list = document.getElementById("courseList");
+            if (list.children.length > 0) {
+                $('#course-submit').prop('disabled', false);
+            } else {
+                $('#course-submit').prop('disabled', true);
+            }
+        });
+
+        if (!deleteAllAppended) {
+            appendDeleteAllButton();
+            deleteAllAppended = true;
+        }
+
+        document.getElementById("courseList").appendChild(listItemContainer);
+
+        document.getElementById("course_name").value = "";
+        document.getElementById("ap_score").value = "1";
+        $('#addCourseButton').prop('disabled', true);
+        toggleDeleteAllButton();
+    }
+
+    /* HELPER FUNCTIONS TO CREATE DYNAMIC ELEMENTS */
+    function removeFromCourseData(courseName, apScore) {
+        courseData = courseData.filter(course => !(course.courseName === courseName && course.apScore === apScore));
+        sessionStorage.setItem('courseData', JSON.stringify(courseData));
+        console.log(courseData);
+    }
+
+    function appendDeleteAllButton() {
+        let deleteAll = createDeleteAllButton();
+        deleteAll.addEventListener("click", function() {
+            courseData = [];
+            sessionStorage.removeItem('courseData');
+            $('#course_name').val('');
+            let list = document.getElementById("courseList");
+            list.innerHTML = "";
+            toggleDeleteAllButton();
+        });
+        document.getElementById("deleteAllContainer").appendChild(deleteAll);
+    }
+
+    function toggleDeleteAllButton() {
+        let list = document.getElementById("courseList");
+        let deleteAllButton = document.getElementById("deleteAllButton");
+        if (list.children.length > 0) {
+            deleteAllButton.style.display = "block"; 
+        } else {
+            deleteAllButton.style.display = "none";
+        }
+    }
+
+    function createItemContainer(listItem, deleteButton) {
+        let listItemContainer = document.createElement("div");
+        listItemContainer.classList.add("list-item-container", "border", "border-secondary");
+
+        listItemContainer.appendChild(listItem);
+        listItemContainer.appendChild(deleteButton);
+
+        return listItemContainer;
+    }
+
+    function createDeleteButton() {
+        let deleteButton = document.createElement("button");
+        deleteButton.type = "button";
+        deleteButton.classList.add("delete-button");
+        
+        let icon = document.createElement("i");
+        icon.classList.add("si-close");
+
+        deleteButton.appendChild(icon);
+
+        return deleteButton;
+    }
+
+    function createDeleteAllButton() {
+        let deleteAll = document.createElement("button");
+        deleteAll.type = "button";
+        deleteAll.classList.add("delete-button-all", "btn", "btn-danger");
+        deleteAll.id = "deleteAllButton";
+        
+        let trashIcon = document.createElement("i");
+        trashIcon.classList.add("si-trash");
+
+        deleteAll.appendChild(trashIcon);
+
+        return deleteAll;
+    }
 
 });
 
-
-var deleteAllAppended = false;
-let courseData = [];
-
-function addCourse() {
-    let courseName = document.getElementById("course_name").value;
-    let apScore = document.getElementById("ap_score").value;
-
-    if (courseName === "" || apScore === "") {
-        return;
-    }
-
-    courseData.push({ courseName: courseName, apScore: apScore});
-    console.log(courseData);
-
-    let deleteButton = createDeleteButton();
-    let listItem = document.createElement("li");
-    listItem.classList.add("course-list-item")
-    listItem.textContent = courseName + ": " + apScore;
-    
-    let listItemContainer = createItemContainer(listItem, deleteButton);
-    
-    deleteButton.addEventListener("click", function() {
-        removeFromCourseData(courseName, apScore);
-        listItemContainer.remove();
-        toggleDeleteAllButton();
-        $('#course_name').val('');
-        let list = document.getElementById("courseList");
-        if (list.children.length > 0) {
-            $('#course-submit').prop('disabled', false);
-        } else {
-            $('#course-submit').prop('disabled', true);
-        }
-    });
-
-    if (!deleteAllAppended) {
-        appendDeleteAllButton();
-        deleteAllAppended = true;
-    }
-
-    document.getElementById("courseList").appendChild(listItemContainer);
-
-    // Reset input values
-    document.getElementById("course_name").value = "";
-    document.getElementById("ap_score").value = "1";
-
-    toggleDeleteAllButton();
-    $('#course-submit').prop('disabled', false);
-}
-
-/* HELPER FUNCTIONS TO CREATE DYNAMIC ELEMENTS */
-function removeFromCourseData(courseName, apScore) {
-    console.log("if u are seeing this, that means this function is being accessed")
-    courseData = courseData.filter(course => !(course.courseName === courseName && course.apScore === apScore))
-    console.log(courseData);
-}
-
-function appendDeleteAllButton() {
-    let deleteAll = createDeleteAllButton();
-    deleteAll.addEventListener("click", function() {
-        courseData = [];
-        $('#course_name').val('');
-        let list = document.getElementById("courseList");
-        list.innerHTML = "";
-        toggleDeleteAllButton();
-        $('#course-submit').prop('disabled', true);
-    });
-    document.getElementById("deleteAllContainer").appendChild(deleteAll);
-}
-
-
-function toggleDeleteAllButton() {
-    let list = document.getElementById("courseList");
-    let deleteAllButton = document.getElementById("deleteAllButton");
-    if (list.children.length > 0) {
-        deleteAllButton.style.display = "block"; 
-    } else {
-        deleteAllButton.style.display = "none";
-    }
-}
-
-
-function createItemContainer(listItem, deleteButton) {
-    let listItemContainer = document.createElement("div");
-    listItemContainer.classList.add("list-item-container", "border", "border-secondary");
-
-    listItemContainer.appendChild(listItem);
-    listItemContainer.appendChild(deleteButton);
-
-    return listItemContainer;
-}
-
-function createDeleteButton() {
-    let deleteButton = document.createElement("button");
-    deleteButton.type = "button";
-    deleteButton.classList.add("delete-button");
-    
-    let icon = document.createElement("i");
-    icon.classList.add("si-close");
-
-    deleteButton.appendChild(icon);
-
-    return deleteButton;
-}
-
-function createDeleteAllButton() {
-    let deleteAll = document.createElement("button");
-    deleteAll.type = "button";
-    deleteAll.classList.add("delete-button-all", "btn", "btn-danger");
-    deleteAll.id = "deleteAllButton";
-    
-    let trashIcon = document.createElement("i");
-    trashIcon.classList.add("si-trash");
-
-    deleteAll.appendChild(trashIcon);
-
-    return deleteAll;
-}
 
