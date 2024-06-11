@@ -50,12 +50,12 @@
     <div class="container-fluid" id="site-footer">
         <div class="row">
             <div class="col-auto d-flex align-items-end">
-                <a href=/index class="logo"><h4>findmy<span style="color: #24ace3">A</span><span style="color: #97ca4f">P</span></a></h4>
+                <a href="{{ url_for('index') }}" class="logo"><h4>findmy<span style="color: #24ace3">A</span><span style="color: #97ca4f">P</span></a></h4>
             </div>
             <div class="col-6 d-flex align-items-end">
-                <a href="/index" class="nav-link d-inline"><h5>Home</h5></a>
+                <a href="{{ url_for('index') }}" class="nav-link d-inline"><h5>Home</h5></a>
                 <span style="margin-right: 10px;"></span>
-                <a href="/about" class="nav-link d-inline"><h5>About</h5></a>
+                <a href="{{ url_for('about') }}" class="nav-link d-inline"><h5>About</h5></a>
             </div>
             <div class="col d-flex align-items-center mb-1">
                 <div class="ms-auto">
