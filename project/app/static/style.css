@@ -356,3 +356,12 @@ input[type='search']::-webkit-search-cancel-button {
 .spacer {
     height: 50px;
 }
+
+.about-container {
+    margin-left: 50px;
+    margin-top: 20vh;
+}
+
+.question-container {
+    margin-left: 50px;
+}

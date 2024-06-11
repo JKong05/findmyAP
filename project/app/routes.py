@@ -6,7 +6,7 @@ from app.models import School
 
 # Whenever web browser requests these two URLs, Flask is going to invoke this function and pass its return value back to the browser
 @app.route('/') # decorators - modifies the function that follows it
-@app.route('/index')
+@app.route('/home')
 def index():
     return render_template('index.html')
 
