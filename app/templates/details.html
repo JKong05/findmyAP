@@ -45,10 +45,10 @@
 
 {% block content %}
 
-<div class="temp-user-container container-fluid container-xxl border border-dark-subtle my-4">
-    <div class="step-one-container my-2 w-100">
+<div class="temp-user-container container-fluid container-lg border border-dark-subtle my-4">
+    <div class="step-one-container w-100 h-75">
         <div class="row mx-2">
-            <div class="col-12 col-md-8">
+            <div class="col-12 col-md-7">
                 <div class="row">
                     <div class="col-12 col-md-6 d-flex">
                         <div class="h2 pt-2 border-bottom border-primary">
@@ -57,12 +57,12 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-12 col-md-7 d-flex align-items-center">
+                    <div class="col col-md-10 d-flex align-items-center">
                         <p>Fill out the input fields with the course you took and the AP score you received on the exam. Make sure that these values <b>correctly match</b> and that they reflect the values that you want to input. You can press the <i class="si-close"></i> button to individually delete entries and press the <i class="si-trash"></i> button to delete all entries. Once you are finished filling out both, press the submit button to get your results! <span style="color: #3B71CA">If you received an AP Calculus BC: AB subscore, please use <b>AP Calculus AB</b> as a search option.</span></p>
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-12 col-md-7 d-flex mx-2">
+                    <div class="col-12 col-md-7 d-flex h-75">
                         <form class="form-outline mb-3" id="temp-user-function" action="{{ url_for('school_details.school_details') }}" method="post" data-mdb-input-init>
                             <div class="input-group" id="course-group">
                                 <input type="search" list="courses" id="course_name" name="course_name" placeholder="Find your course" class="form-control" aria-label="CourseName">
@@ -89,8 +89,10 @@
                     </div>
                 </div>
             </div>
-            <div class="col-12 col-md-4">
-                <img src="static/exam.png">
+            <div class="col-12 col-md-5 h-75">
+                <div class="step-1-img">
+                    <img src="static/exam.svg" style="transform: scale(0.6);">
+                </div>
             </div>
         </div>
     </div>
@@ -193,28 +195,34 @@
 {% endif %}
 
 {% if show_details and result_details %}
-<div class="temp-user-container-results container-xxl border border-dark-subtle my-4 d-flex align-items-start">
-    <div class="step-three-container mt-2 flex-grow-1">
+<div class="temp-user-container-results container-fluid container-lg border border-dark-subtle my-4 d-flex align-items-start">
+    <div class="step-one-container mt-2 w-100 h-75">
         <div class="row mx-2">
-            <div class="col d-flex">
-                <div class="h2 pt-2 border-bottom border-primary">
-                    <h2 style="color: #3B71CA">Step 3</h2>
+            <div class="col-12 col-md-7">
+                <div class="row">
+                    <div class="col-12 col-md-6 d-flex">
+                        <div class="h2 pt-2 border-bottom border-primary">
+                            <h2 style="color: #3B71CA">Step 3</h2>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col col-md-10 d-flex align-items-center">
+                        <p><b style="color: #3B71CA">Congratulations!</b><br>Your hard work in high school may earn you college credit! Below is a <b>csv file</b> containing all relevant data for which AP courses that may fulfill college credit. <br>To go back to the top of the page, <a href="#">click here.</a></p>
+                    </div>
+                </div>
+                <div class="row mt-3">
+                    <div class="col d-flex align-items-center">
+                        <p><a href="data:text/csv;charset=utf-8,{{ csv_content | urlencode }}" download="{{ school_name }}.csv" class="csv-download"><i class="si-download"></i> Download CSV</a></p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-12 col-md-5 h-75">
+                <div class="step-1-img">
+                    <img src="static/graduation.svg" style="transform: scale(0.6);">
                 </div>
             </div>
         </div>
-        <div class="row mx-2">
-            <div class="col d-flex align-items-center">
-                <p><b style="color: #3B71CA">Congratulations!</b><br>Your hard work in high school may earn you college credit! Below is a <b>csv file</b> containing all relevant data for which AP courses that may fulfill college credit. <br>To use the search function again, <a href="#">click here.</a></p>
-            </div>
-        </div>
-        <div class="row mx-2 mt-3">
-            <div class="col d-flex align-items-center">
-                <p><a href="data:text/csv;charset=utf-8,{{ csv_content | urlencode }}" download="{{ school_name }}.csv" class="csv-download"><i class="si-download"></i> Download CSV</a></p>
-            </div>
-        </div>
-    </div>
-    <div class="img-container">
-       <img src="static/graduation.svg" class="graduation-image" viewBox="-1000 -59 1830 1087">
     </div>
 </div>
 <div style="height: 50px;"></div>
