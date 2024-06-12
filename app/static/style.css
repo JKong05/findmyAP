@@ -126,6 +126,21 @@ header {
     padding: 25px;
 }
 
+@media (max-width: 768px) {
+    #home-search-container {
+        width: auto;
+    }
+    #school-search-container {
+        width: 100%;
+    }
+    .title-container {
+        width: 75%;
+    }
+    .title-container h1 {
+        margin:auto;
+    }
+}
+
 #search-function {
     margin: auto;
 }
@@ -220,6 +235,10 @@ input[type='search']::-webkit-search-cancel-button {
     border-top-left-radius: 0%;
 }
 
+option {
+    position: inherit;
+}
+
 .form-container {
     width: 100%; 
     overflow: hidden;
@@ -233,7 +252,7 @@ input[type='search']::-webkit-search-cancel-button {
     list-style-type: none;
     padding: 0; 
     margin: 0;
-    width: 441.75px;
+    width: fit-content;
     margin-bottom: 5%;
     display: flex;
     flex-wrap: wrap;

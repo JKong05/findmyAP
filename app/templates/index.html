@@ -28,16 +28,16 @@
             </div>
         </header>
         {% block main %}
-        <div class="wrapped-content" id="home-wrapped-content">
+        <div class="wrapped-content container-fluid" id="home-wrapped-content">
         {% endblock %}
             {% block header %}
-            <div class="title-container">
-                <h1><span class="dynamic-title"></span></h1>
+            <div class="title-container container-fluid">
+                <h1 class="mx-3"><span class="dynamic-title"></span></h1>
             </div>
             {% endblock %}
         
             {% block search %}
-            <div class="search-container mt-4" id="home-search-container">
+            <div class="search-container container-fluid mt-4" id="home-search-container">
                 <h3 style="color: white">Earn <b>college credit</b> for your work</h3>
                 <form class="form-outline" id="search-function" action="{{ url_for('school_details.school_details') }}" method="get" data-mdb-input-init>
                     <div class="input-group">
@@ -58,7 +58,7 @@
 
         {% block lowercontent %}
         <div class="main">
-            <div class="centered-container">
+            <div class="centered-container mx-2">
                 <h2><b>College credit search made easy</b></h2>
                 <h5>In three simple steps, find where your AP scores get you credit</h5>
             </div>
