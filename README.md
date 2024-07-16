@@ -5,7 +5,7 @@ Earn college credit for your work. This platform is designed for students lookin
 It allows students to simply enter their AP courses and scores, and our system checks for equivalent college credit at the specified school.
 
 ## Tech Stack
-[![My Skills](https://skillicons.dev/icons?i=js,flask,py,bootstrap,selenium,sqlite)](https://skillicons.dev)
+![My Skills](https://skillicons.dev/icons?i=js,flask,py,bootstrap,selenium,sqlite)
 
 ## What I learned
 Prior to developing this application, my knowledge of full-stack development and other languages was very limited. I had finished learning the fundamentals of python and hoped to use it
