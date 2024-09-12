@@ -157,7 +157,7 @@ $(document).ready(function() {
     });
 });
 
-/********************************************************* */
+/**********************************************************/
 $(document).ready(function() {
     let allData = [];
     let autocompleteSelected = false;
@@ -165,7 +165,6 @@ $(document).ready(function() {
     let deleteAllAppended = false; 
     
     $('#addCourseButton').prop('disabled', true);
-    $("#course-submit").prop("disabled", true);
 
     $('#course_name').autocomplete({
         source: function(request, response) {
@@ -218,12 +217,6 @@ $(document).ready(function() {
     document.getElementById("addCourseButton").addEventListener("click", addCourse);
     const courseList = document.getElementById("courseList");
 
-    courseList.addEventListener("DOMNodeInserted", function(event) {
-        if (courseList.children.length > 0) {
-            $('#course-submit').prop('disabled', false);
-        }
-    
-    });
     document.getElementById("temp-user-function").addEventListener('submit', function() {
         let storedData = document.createElement('input');
         storedData.type = 'hidden';
@@ -278,8 +271,6 @@ $(document).ready(function() {
             let list = document.getElementById("courseList");
             if (list.children.length > 0) {
                 $('#course-submit').prop('disabled', false);
-            } else {
-                $('#course-submit').prop('disabled', true);
             }
         });
 
