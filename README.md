@@ -1,6 +1,14 @@
-# findmyAP College Credit Project
+<a id="readme-top"></a>
 
-## Overview
+<!-- PROJECT LOGO -->
+<br />
+<div align="center">
+  <a href="https://github.com/JKong05/patty-wagon-voyage.git">
+    <img src="/frontend/src/assets/pattywagon.png" alt="Logo" width="1080" height="360">
+  </a>
+</div>
+
+## About The Project
 Earn college credit for your work. This platform is designed for students looking to streamline the AP credit policy search process at over 2000 College Board affiliated institutions.
 It allows students to simply enter their AP courses and scores, and our system checks for equivalent college credit at the specified school.
 
