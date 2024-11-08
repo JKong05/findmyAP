@@ -4,7 +4,7 @@
 <br />
 <div align="center">
   <a href="https://github.com/JKong05/findmyAP.git">
-    <img src="/app/static/findmyap.png" alt="Logo" width="1080" height="360">
+    <img src="/app/static/findmyap.png" alt="Logo" width="900" height="360">
   </a>
 </div>
 
