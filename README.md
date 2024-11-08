@@ -3,8 +3,8 @@
 <!-- PROJECT LOGO -->
 <br />
 <div align="center">
-  <a href="https://github.com/JKong05/patty-wagon-voyage.git">
-    <img src="/frontend/src/assets/pattywagon.png" alt="Logo" width="1080" height="360">
+  <a href="https://github.com/JKong05/findmyAP.git">
+    <img src="/app/static/findmyap.png" alt="Logo" width="1080" height="360">
   </a>
 </div>
 
